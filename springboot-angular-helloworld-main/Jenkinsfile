@@ -1,0 +1,57 @@
+pipeline {
+    agent any 
+
+    tools {
+        jdk 'jdk17'
+        maven 'maven3'
+    }
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+    stages {
+        stage("git checkout") {
+            steps {
+                git branch: 'main',
+                credentialId: 'git-cred',
+                url: 'https://github.com/prajwalbalapure1/Jenkins_Demo.git'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('sonaQube analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh ''' 
+                    $SCANNER_HOME/bin/sonar-scanner \ 
+                        -Dsonar.projectName=springboot-angular-helloworld-main \ 
+                        -Dsonar.projectKey=springboot-angular-helloworld-main \ 
+                        -Dsonar.java.binaries=. \ 
+                        -Dsonar.sources=/Users/prajwalb/project_1/springboot-angular-helloworld-main/backend/helloworld/src/main \ 
+                        -Dsonar.tests=/Users/prajwalb/project_1/springboot-angular-helloworld-main/backend/helloworld/src/test \
+                    '''
+                }
+            }
+        }
+        stage('quality gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: false, credentialId: 'sonar-cred'
+                }
+            }
+        }
+        stage('package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+    }
+}
