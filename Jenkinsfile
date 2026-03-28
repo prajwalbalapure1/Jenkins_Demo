@@ -31,11 +31,11 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonar') {
                     sh ''' 
-                    $SCANNER_HOME/bin/sonar-scanner \ 
-                        -Dsonar.projectName=springboot-angular-helloworld-main \ 
-                        -Dsonar.projectKey=springboot-angular-helloworld-main \ 
-                        -Dsonar.java.binaries=. \ 
-                        -Dsonar.sources=/Users/prajwalb/project_1/springboot-angular-helloworld-main/backend/helloworld/src/main \ 
+                    $SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectName=springboot-angular-helloworld-main \
+                        -Dsonar.projectKey=springboot-angular-helloworld-main \
+                        -Dsonar.java.binaries=. \
+                        -Dsonar.sources=/Users/prajwalb/project_1/springboot-angular-helloworld-main/backend/helloworld/src/main \
                         -Dsonar.tests=/Users/prajwalb/project_1/springboot-angular-helloworld-main/backend/helloworld/src/test \
                     '''
                 }
