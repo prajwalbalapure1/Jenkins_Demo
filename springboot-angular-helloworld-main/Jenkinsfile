@@ -24,7 +24,7 @@ pipeline {
         }
         stage('build') {
             steps {
-                sh 'mvn compile'
+                sh 'mvn compile -f springboot-angular-helloworld-main/backend/helloworld'
             }
         }
         stage('test') {
